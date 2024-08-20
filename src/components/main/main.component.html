@@ -2,11 +2,11 @@
   <fieldset class="flex space-around">
     <legend>Playstyle</legend>
     <label>
-      <input type="radio" value="SP" [formControl]="playstyle">
+      <input name="playstyle" type="radio" value="SP" [formControl]="playstyle">
       SP
     </label>
     <label>
-      <input type="radio" value="DP" [formControl]="playstyle">
+      <input name="playstyle" type="radio" value="DP" [formControl]="playstyle">
       DP
     </label>
   </fieldset>
@@ -51,8 +51,7 @@
         </label>
         <label class="grow">
           Time
-          <input [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" formControlName="time" placeholder="Date Time">
-          <owl-date-time #dt1></owl-date-time>
+          <input formControlName="time" type="datetime-local">
         </label>
         <label class="grow">
           Flare (optional)

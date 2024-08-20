@@ -1,24 +1,2 @@
 /* You can add global styles to this file, and also import other style files */
-@import "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
 
-.owl-dt-container{
-  background: var(--light-default);
-}
-
-.owl-dt-calendar-table {
-  display: table;
-}
-
-.owl-dt-calendar-table, .owl-dt-calendar-header, .owl-dt-control, .owl-dt-weekday, .owl-dt-calendar-cell {
-  color: var(--default) !important;
-}
-
-.owl-dt-weekday, .owl-dt-calendar-cell {
-  border: none;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.owl-dt-calendar-table-divider {
-  border: none;
-}

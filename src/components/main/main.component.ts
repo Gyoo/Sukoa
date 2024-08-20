@@ -5,15 +5,12 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {Chart} from "../../model/Chart";
 import {Score, TachiImport} from "../../model/TachiImport";
 import {pairwise, startWith} from "rxjs";
-import {OwlDateTimeModule, OwlNativeDateTimeModule} from "@danielmoncada/angular-datetime-picker";
 
 @Component({
   selector: 'app-main',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
@@ -36,7 +33,7 @@ export class MainComponent {
     score: new FormControl(0, {nonNullable: true, validators: Validators.required}),
     lamp: new FormControl("CLEAR", Validators.required),
     flare: new FormControl(),
-    time: new FormControl(new Date()),
+    time: new FormControl(new Date().toISOString().slice(0, 16)),
     judgements: new FormGroup({
       marvelous: new FormControl(),
       perfect: new FormControl(),
@@ -85,7 +82,7 @@ export class MainComponent {
     this.group.reset({
       lamp: "CLEAR",
       score: 0,
-      time: new Date()
+      time: new Date().toISOString().slice(0, 16)
     });
     this.selectedSong = undefined;
     this.selectedSongCharts = undefined;
@@ -109,7 +106,7 @@ export class MainComponent {
   addScore() {
     let score: Score = {
       lamp: this.group.controls.lamp.value!,
-      timeAchieved: this.group.controls.time.value!.getTime(),
+      timeAchieved: new Date(this.group.controls.time.value!).getTime(),
       matchType: "inGameID",
       identifier: "" + this.selectedSong?.id!,
       difficulty: this.group.controls.difficulty.value!,
