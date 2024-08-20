@@ -49,7 +49,7 @@ export class MainComponent {
 
   constructor(private route: ActivatedRoute) {
     this.songs = this.route.snapshot.data['songs'].map((song: Song) => {
-      song.romajiTitle = tokenize(song.title).map((token: any) => toRomaji(token)).join(' ');
+      song.romajiTitle = tokenize(song.title).map((token: any) => toRomaji(token, {convertLongVowelMark: true})).join(' ');
       if(!isRomaji(song.title)){
         song.label = song.title + " [" + song.romajiTitle + "]"
       }
