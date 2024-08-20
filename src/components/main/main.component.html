@@ -1,0 +1,146 @@
+<form [formGroup]="group">
+  <fieldset class="flex space-around">
+    <legend>Playstyle</legend>
+    <label>
+      <input type="radio" value="SP" [formControl]="playstyle">
+      SP
+    </label>
+    <label>
+      <input type="radio" value="DP" [formControl]="playstyle">
+      DP
+    </label>
+  </fieldset>
+  <fieldset>
+    <legend>Song information</legend>
+    <label class="width">
+      Title
+      <input type="search" list="songList" name="songTitle" formControlName="title">
+      <datalist id="songList">
+        @for (song of songs; track song.id) {
+          <option [value]="song.title">{{ song.title }}</option>
+        }
+      </datalist>
+    </label>
+    @if (selectedSong) {
+      <fieldset class="flex space-around">
+        <legend>Difficulty</legend>
+        @for (chart of selectedSongCharts; track chart.difficulty){
+          <label>
+            <input type="radio" [value]="chart.difficulty" formControlName="difficulty">
+            {{chart.difficulty}} ({{chart.level}})
+          </label>
+        }
+      </fieldset>
+      <div class="flex">
+        <label class="grow">
+          Score
+          <input type="number" min="0" max="1000000" formControlName="score">
+        </label>
+        <label class="grow">
+          Lamp
+          <select formControlName="lamp">
+            <option>FAILED</option>
+            <option>ASSIST</option>
+            <option>CLEAR</option>
+            <option>FULL COMBO</option>
+            <option>GREAT FULL COMBO</option>
+            <option>PERFECT FULL COMBO</option>
+            <option>MARVELOUS FULL COMBO</option>
+            <option>LIFE4</option>
+          </select>
+        </label>
+        <label class="grow">
+          Time
+          <input [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" formControlName="time" placeholder="Date Time">
+          <owl-date-time #dt1></owl-date-time>
+        </label>
+        <label class="grow">
+          Flare (optional)
+          <select formControlName="flare">
+            <option>0</option>
+            <option>I</option>
+            <option>II</option>
+            <option>III</option>
+            <option>IV</option>
+            <option>V</option>
+            <option>VI</option>
+            <option>VII</option>
+            <option>VIII</option>
+            <option>IX</option>
+            <option>EX</option>
+          </select>
+        </label>
+      </div>
+      <fieldset class="flex" formGroupName="judgements">
+        <legend>Judgements (optional)</legend>
+        <label>
+          MARVELOUS
+          <input type="number" min="0" formControlName="marvelous">
+        </label>
+        <label>
+          PERFECT
+          <input type="number" min="0" formControlName="perfect">
+        </label>
+        <label>
+          GREAT
+          <input type="number" min="0" formControlName="great">
+        </label>
+        <label>
+          GOOD
+          <input type="number" min="0" formControlName="good">
+        </label>
+        <label>
+          OK
+          <input type="number" min="0" formControlName="ok">
+        </label>
+        <label>
+          MISS
+          <input type="number" min="0" formControlName="miss">
+        </label>
+      </fieldset>
+      <div>
+        <button (click)="addScore()">Add score</button>
+      </div>
+    }
+  </fieldset>
+</form>
+
+@if(scores.length){
+  <h1>Summary</h1>
+  <table>
+    <thead>
+    <tr>
+      <th>Title</th>
+      <th>Difficulty</th>
+      <th>Score</th>
+      <th>Lamp</th>
+      <th>Flare</th>
+      <th>Judgements</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for(score of scores; track $index){
+        <tr>
+          <td>{{getSongTitle(score.identifier)}}</td>
+          <td>{{score.difficulty}} ({{getChartLevel(score.identifier, score.difficulty)}})</td>
+          <td>{{score.score}}</td>
+          <td>{{score.lamp}}</td>
+          <td>{{score.optional?.flare}}</td>
+          <td>
+            @if(!!score.judgements){
+              <span class="success">{{score.judgements.MARVELOUS}}</span> -
+              <span class="attention">{{score.judgements.PERFECT}}</span> -
+              <span class="severe">{{score.judgements.GREAT}}</span> -
+              <span class="accent">{{score.judgements.GOOD}}</span> -
+              <span class="default">{{score.judgements.OK}}</span> -
+              <span class="danger">{{score.judgements.MISS}}</span>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <button (click)="generate()">Generate !</button>
+}
+
