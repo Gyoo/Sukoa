@@ -16,7 +16,7 @@
       Title
       <input type="text" autocomplete="off" name="songTitle" formControlName="title" ngxTypeahead [taList]="songs"
              taListItemLabel="label" [taListItemField]="['title', 'romajiTitle']" (taSelected)="onSelectedSong($event)"
-             [value]="selectedSong?.title">
+             [value]="selectedSong?.title" placeholder="Start typing to select the song (romaji available for japanese text)">
     </label>
     @if (selectedSong) {
       <fieldset class="flex space-around">
