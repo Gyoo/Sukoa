@@ -5,12 +5,15 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {Chart} from "../../model/Chart";
 import {Score, TachiImport} from "../../model/TachiImport";
 import {pairwise, startWith} from "rxjs";
+import {isRomaji, tokenize, toRomaji} from "wanakana";
+import {NgxTypeAheadComponent} from "ngx-typeahead";
 
 @Component({
   selector: 'app-main',
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    NgxTypeAheadComponent,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
@@ -45,9 +48,18 @@ export class MainComponent {
   });
 
   constructor(private route: ActivatedRoute) {
-    this.songs = this.route.snapshot.data['songs'].sort((a: Song, b: Song) => {
-      const titleA = a.title.toUpperCase(); // ignore upper and lowercase
-      const titleB = b.title.toUpperCase(); // ignore upper and lowercase
+    this.songs = this.route.snapshot.data['songs'].map((song: Song) => {
+      song.romajiTitle = tokenize(song.title).map((token: any) => toRomaji(token)).join(' ');
+      if(!isRomaji(song.title)){
+        song.label = song.title + " [" + song.romajiTitle + "]"
+      }
+      else{
+        song.label = song.title;
+      }
+      return song;
+    }).sort((a: Song, b: Song) => {
+      const titleA = a.romajiTitle.toUpperCase(); // ignore upper and lowercase
+      const titleB = b.romajiTitle.toUpperCase(); // ignore upper and lowercase
       if (titleA < titleB) {
         return -1;
       }
@@ -59,11 +71,6 @@ export class MainComponent {
       return 0;
     });
     this.charts = this.route.snapshot.data['charts'];
-    this.group.controls.title.valueChanges.subscribe((change) => {
-      if (change) {
-        this.onSelectedSong(change)
-      }
-    });
     this.playstyle.valueChanges.pipe(startWith("SP"), pairwise())
       .subscribe(([prev, next]: [any, any]) => {
         console.log(prev, next);
@@ -88,8 +95,8 @@ export class MainComponent {
     this.selectedSongCharts = undefined;
   }
 
-  onSelectedSong(selectedSongTitle: string) {
-    this.selectedSong = this.songs.filter(song => song.title === selectedSongTitle).pop();
+  onSelectedSong(selectedSong: Song) {
+    this.selectedSong = selectedSong;
     if(this.selectedSong) {
       this.selectedSongCharts = this.charts.filter(chart => chart.songID === this.selectedSong?.id && chart.playtype === this.playstyle.value).sort((a, b) => +a.level - +b.level);
     }

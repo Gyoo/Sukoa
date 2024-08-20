@@ -14,20 +14,17 @@
     <legend>Song information</legend>
     <label class="width">
       Title
-      <input type="search" list="songList" name="songTitle" formControlName="title">
-      <datalist id="songList">
-        @for (song of songs; track song.id) {
-          <option [value]="song.title">{{ song.title }}</option>
-        }
-      </datalist>
+      <input type="text" autocomplete="off" name="songTitle" formControlName="title" ngxTypeahead [taList]="songs"
+             taListItemLabel="label" [taListItemField]="['title', 'romajiTitle']" (taSelected)="onSelectedSong($event)"
+             [value]="selectedSong?.title">
     </label>
     @if (selectedSong) {
       <fieldset class="flex space-around">
         <legend>Difficulty</legend>
-        @for (chart of selectedSongCharts; track chart.difficulty){
+        @for (chart of selectedSongCharts; track chart.difficulty) {
           <label>
             <input type="radio" [value]="chart.difficulty" formControlName="difficulty">
-            {{chart.difficulty}} ({{chart.level}})
+            {{ chart.difficulty }} ({{ chart.level }})
           </label>
         }
       </fieldset>
@@ -104,7 +101,7 @@
   </fieldset>
 </form>
 
-@if(scores.length){
+@if (scores.length) {
   <h1>Summary</h1>
   <table>
     <thead>
@@ -118,21 +115,21 @@
     </tr>
     </thead>
     <tbody>
-      @for(score of scores; track $index){
+      @for (score of scores; track $index) {
         <tr>
-          <td>{{getSongTitle(score.identifier)}}</td>
-          <td>{{score.difficulty}} ({{getChartLevel(score.identifier, score.difficulty)}})</td>
-          <td>{{score.score}}</td>
-          <td>{{score.lamp}}</td>
-          <td>{{score.optional?.flare}}</td>
+          <td>{{ getSongTitle(score.identifier) }}</td>
+          <td>{{ score.difficulty }} ({{ getChartLevel(score.identifier, score.difficulty) }})</td>
+          <td>{{ score.score }}</td>
+          <td>{{ score.lamp }}</td>
+          <td>{{ score.optional?.flare }}</td>
           <td>
-            @if(!!score.judgements){
-              <span class="success">{{score.judgements.MARVELOUS}}</span> -
-              <span class="attention">{{score.judgements.PERFECT}}</span> -
-              <span class="severe">{{score.judgements.GREAT}}</span> -
-              <span class="accent">{{score.judgements.GOOD}}</span> -
-              <span class="default">{{score.judgements.OK}}</span> -
-              <span class="danger">{{score.judgements.MISS}}</span>
+            @if (!!score.judgements) {
+              <span class="success">{{ score.judgements.MARVELOUS }}</span> -
+              <span class="attention">{{ score.judgements.PERFECT }}</span> -
+              <span class="severe">{{ score.judgements.GREAT }}</span> -
+              <span class="accent">{{ score.judgements.GOOD }}</span> -
+              <span class="default">{{ score.judgements.OK }}</span> -
+              <span class="danger">{{ score.judgements.MISS }}</span>
             }
           </td>
         </tr>

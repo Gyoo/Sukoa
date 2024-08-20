@@ -1,0 +1,7 @@
+form {
+  overflow: unset;
+}
+
+::ng-deep .ta-item {
+  background: var(--contrast);
+}
