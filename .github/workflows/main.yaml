@@ -19,7 +19,7 @@ jobs:
         run: npm run build
       - name: Deploy to gh pages
         run: |
-          npx angular-cli-ghpages --dir=dist/sukoa/browser --no-silent
+          npx angular-cli-ghpages --dir=dist/sukoa/browser --no-silent --name="GitHub Actions" --email=noreply@github.com
         env:
           CI: true
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
