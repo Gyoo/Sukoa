@@ -34,7 +34,7 @@ export class MainComponent {
     title: new FormControl("", Validators.required),
     difficulty: new FormControl("", Validators.required),
     score: new FormControl(0, {nonNullable: true, validators: Validators.required}),
-    lamp: new FormControl("", Validators.required),
+    lamp: new FormControl("CLEAR", Validators.required),
     flare: new FormControl(),
     time: new FormControl(new Date()),
     judgements: new FormGroup({
@@ -82,7 +82,11 @@ export class MainComponent {
   }
 
   reset(){
-    this.group.reset();
+    this.group.reset({
+      lamp: "CLEAR",
+      score: 0,
+      time: new Date()
+    });
     this.selectedSong = undefined;
     this.selectedSongCharts = undefined;
   }
@@ -95,11 +99,11 @@ export class MainComponent {
   }
 
   getSongTitle(inGameID: string){
-    return this.songs.filter(song => song.id === inGameID).pop()?.title;
+    return this.songs.filter(song => "" + song.id === inGameID).pop()?.title;
   }
 
   getChartLevel(inGameID: string, difficulty: string){
-    return this.charts.filter(chart => chart.songID === inGameID && chart.difficulty === difficulty).pop()?.level;
+    return this.charts.filter(chart => "" + chart.songID === inGameID && chart.difficulty === difficulty).pop()?.level;
   }
 
   addScore() {
