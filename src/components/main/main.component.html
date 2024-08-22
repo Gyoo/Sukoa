@@ -1,4 +1,4 @@
-<form [formGroup]="group">
+<form [formGroup]="group" (submit)="addScore()">
   <fieldset class="flex space-around">
     <legend>Playstyle</legend>
     <label>
@@ -13,28 +13,28 @@
   <fieldset>
     <legend>Song information</legend>
     <label class="width">
-      Title
+      Title*
       <input type="text" autocomplete="off" name="songTitle" formControlName="title" ngxTypeahead [taList]="songs"
              taListItemLabel="label" [taListItemField]="['title', 'romajiTitle']" (taSelected)="onSelectedSong($event)"
              [value]="selectedSong?.title" placeholder="Start typing to select the song (romaji available for japanese text)">
     </label>
     @if (selectedSong) {
-      <fieldset class="flex space-around">
-        <legend>Difficulty</legend>
+      <fieldset class="flex space-around" [ngClass]="{'success': group.controls.difficulty.valid, 'danger': group.controls.difficulty.invalid}">
+        <legend>Difficulty*</legend>
         @for (chart of selectedSongCharts; track chart.difficulty) {
           <label>
-            <input type="radio" [value]="chart.difficulty" formControlName="difficulty">
+            <input type="radio" [value]="chart.difficulty" formControlName="difficulty" id="difficulty">
             {{ chart.difficulty }} ({{ chart.level }})
           </label>
         }
       </fieldset>
       <div class="flex">
         <label class="grow">
-          Score
+          Score*
           <input type="number" min="0" max="1000000" formControlName="score">
         </label>
         <label class="grow">
-          Lamp
+          Lamp*
           <select formControlName="lamp">
             <option>FAILED</option>
             <option>ASSIST</option>
@@ -47,7 +47,7 @@
           </select>
         </label>
         <label class="grow">
-          Time
+          Time*
           <input formControlName="time" type="datetime-local">
         </label>
         <label class="grow">
@@ -67,8 +67,8 @@
           </select>
         </label>
       </div>
-      <fieldset class="flex" formGroupName="judgements">
-        <legend>Judgements (optional)</legend>
+      <fieldset class="flex" formGroupName="judgements" [ngClass]="{'success': group.controls.judgements.valid, 'danger': group.controls.judgements.invalid}">
+        <legend>Judgements (optional, all or none)</legend>
         <label>
           MARVELOUS
           <input type="number" min="0" formControlName="marvelous">
@@ -95,7 +95,7 @@
         </label>
       </fieldset>
       <div>
-        <button (click)="addScore()">Add score</button>
+        <button type="submit" [disabled]="group.invalid">Add score</button>
       </div>
     }
   </fieldset>

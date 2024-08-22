@@ -7,6 +7,8 @@ import {Score, TachiImport} from "../../model/TachiImport";
 import {pairwise, startWith} from "rxjs";
 import {isRomaji, tokenize, toRomaji} from "wanakana";
 import {NgxTypeAheadComponent} from "ngx-typeahead";
+import {allOrNoneRequiredValidator} from "../../validators/all-or-none.validator";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-main',
@@ -14,6 +16,7 @@ import {NgxTypeAheadComponent} from "ngx-typeahead";
   imports: [
     ReactiveFormsModule,
     NgxTypeAheadComponent,
+    NgClass,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
@@ -36,7 +39,7 @@ export class MainComponent {
     score: new FormControl(0, {nonNullable: true, validators: Validators.required}),
     lamp: new FormControl("CLEAR", Validators.required),
     flare: new FormControl(),
-    time: new FormControl(new Date().toISOString().slice(0, 16)),
+    time: new FormControl(new Date().toISOString().slice(0, 16), Validators.required),
     judgements: new FormGroup({
       marvelous: new FormControl(),
       perfect: new FormControl(),
@@ -44,7 +47,7 @@ export class MainComponent {
       good: new FormControl(),
       ok: new FormControl(),
       miss: new FormControl(),
-    })
+    }, allOrNoneRequiredValidator)
   });
 
   constructor(private route: ActivatedRoute) {
@@ -87,6 +90,7 @@ export class MainComponent {
 
   reset(){
     this.group.reset({
+      title: "",
       lamp: "CLEAR",
       score: 0,
       time: new Date().toISOString().slice(0, 16)
