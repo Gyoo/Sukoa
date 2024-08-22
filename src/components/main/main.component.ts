@@ -85,6 +85,24 @@ export class MainComponent {
           this.playstyle.setValue(prev, {emitEvent: false});
         }
       }
+    });
+    this.group.statusChanges.subscribe(status => {
+      if(status === "VALID" && (!!this.group.controls.judgements.controls.marvelous.value || this.group.controls.judgements.controls.marvelous.value === 0)){
+        let lamp = "MARVELOUS FULL COMBO";
+        if(this.group.controls.judgements.controls.perfect.value > 0){
+          lamp = "PERFECT FULL COMBO";
+        }
+        if(this.group.controls.judgements.controls.great.value > 0){
+          lamp = "GREAT FULL COMBO";
+        }
+        if(this.group.controls.judgements.controls.good.value > 0){
+          lamp = "FULL COMBO";
+        }
+        if(this.group.controls.judgements.controls.miss.value > 0){
+          lamp = "CLEAR";
+        }
+        this.group.controls.lamp.setValue(lamp);
+      }
     })
   }
 
